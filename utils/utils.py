@@ -56,10 +56,9 @@ def normalize(x):
 
 def merge_masks(img1, img2, full_w):
     h = img1.shape[0]
-
     new = np.zeros((h, full_w), np.float32)
-    new[:, :full_w // 2 + 1] = img1[:, :full_w // 2 + 1]
-    new[:, full_w // 2 + 1:] = img2[:, -(full_w // 2 - 1):]
+    new[:, :full_w // 2 -1 ] = img1[:, :full_w // 2 -1 ]
+    new[:, full_w // 2 :-1] = img2[:, -(full_w // 2 ):]
 
     return new
 

@@ -21,8 +21,8 @@ def train_net(net,
               gpu=False,
               img_scale=0.5):
 
-    dir_img = 'data/train/'
-    dir_mask = 'data/train_masks/'
+    dir_img = 'result/train/'
+    dir_mask = 'result/target/'
     dir_checkpoint = 'checkpoints/'
 
     ids = get_ids(dir_img)
@@ -101,11 +101,11 @@ def train_net(net,
 
 def get_args():
     parser = OptionParser()
-    parser.add_option('-e', '--epochs', dest='epochs', default=5, type='int',
+    parser.add_option('-e', '--epochs', dest='epochs', default=20, type='int',
                       help='number of epochs')
     parser.add_option('-b', '--batch-size', dest='batchsize', default=10,
                       type='int', help='batch size')
-    parser.add_option('-l', '--learning-rate', dest='lr', default=0.1,
+    parser.add_option('-l', '--learning-rate', dest='lr', default=0.002,
                       type='float', help='learning rate')
     parser.add_option('-g', '--gpu', action='store_true', dest='gpu',
                       default=False, help='use cuda')
