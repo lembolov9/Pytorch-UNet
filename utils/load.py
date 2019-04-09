@@ -22,9 +22,9 @@ def split_ids(ids, n=2):
 
 def to_cropped_imgs(ids, dir, suffix, scale):
     """From a list of tuples, returns the correct cropped img"""
-    for id, pos in ids:
+    for id in ids:
         im = resize_and_crop(Image.open(dir + id + suffix), scale=scale)
-        yield get_square(im, pos)
+        yield im
 
 def get_imgs_and_masks(ids, dir_img, dir_mask, scale):
     """Return all the couples (img, mask)"""

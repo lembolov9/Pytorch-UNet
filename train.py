@@ -26,7 +26,9 @@ def train_net(net,
     dir_checkpoint = 'checkpoints/'
 
     ids = get_ids(dir_img)
-    ids = split_ids(ids)
+
+    # ids = split_ids(ids)
+
 
     iddataset = split_train_val(ids, val_percent)
 
@@ -58,7 +60,6 @@ def train_net(net,
         # reset the generators
         train = get_imgs_and_masks(iddataset['train'], dir_img, dir_mask, img_scale)
         val = get_imgs_and_masks(iddataset['val'], dir_img, dir_mask, img_scale)
-
         epoch_loss = 0
 
         for i, b in enumerate(batch(train, batch_size)):
@@ -103,9 +104,9 @@ def get_args():
     parser = OptionParser()
     parser.add_option('-e', '--epochs', dest='epochs', default=20, type='int',
                       help='number of epochs')
-    parser.add_option('-b', '--batch-size', dest='batchsize', default=10,
+    parser.add_option('-b', '--batch-size', dest='batchsize', default=1,
                       type='int', help='batch size')
-    parser.add_option('-l', '--learning-rate', dest='lr', default=0.002,
+    parser.add_option('-l', '--learning-rate', dest='lr', default=0.1,
                       type='float', help='learning rate')
     parser.add_option('-g', '--gpu', action='store_true', dest='gpu',
                       default=False, help='use cuda')
