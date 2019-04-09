@@ -6,11 +6,11 @@ class DiceCoeff(Function):
 
     def forward(self, input, target):
         self.save_for_backward(input, target)
-        eps = 0.0001
+        eps = 0.0000001
         self.inter = torch.dot(input.contiguous().view( -1), target.contiguous().view( -1))
-        self.union = torch.sum(input) + torch.sum(target)
+        self.union = torch.sum(input) + torch.sum(target) + eps
 
-        t = (2 * self.inter.float()) / self.union.float()
+        t = (2 * self.inter.float() + eps) / self.union.float()
         return t
 
     # This function has only a single output, so it gets only one gradient
