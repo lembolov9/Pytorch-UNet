@@ -19,7 +19,8 @@ def train_net(net,
               val_percent=0.25,
               save_cp=True,
               gpu=False,
-              img_scale=0.5):
+              img_scale=0.5,
+              weight_decay=0.005):
 
     dir_img = 'result/train/'
     dir_mask = 'result/target/'
@@ -49,7 +50,7 @@ def train_net(net,
     optimizer = optim.SGD(net.parameters(),
                           lr=lr,
                           momentum=0.9,
-                          weight_decay=0.005)
+                          weight_decay=weight_decay)
 
     criterion = nn.BCELoss()
 
@@ -115,6 +116,9 @@ def get_args():
     parser.add_option('-s', '--scale', dest='scale', type='float',
                       default=0.5, help='downscaling factor of the images')
 
+    parser.add_option('-w', '--weight', dest='weight', type='float',
+                      default=0.0005, help='weight decay')
+
     (options, args) = parser.parse_args()
     return options
 
@@ -137,7 +141,8 @@ if __name__ == '__main__':
                   batch_size=args.batchsize,
                   lr=args.lr,
                   gpu=args.gpu,
-                  img_scale=args.scale)
+                  img_scale=args.scale,
+                  weight_decay = args.weight)
     except KeyboardInterrupt:
         torch.save(net.state_dict(), 'INTERRUPTED.pth')
         print('Saved interrupt')
