@@ -27,45 +27,55 @@ def predict_img(net,
     img = resize_and_crop(full_img, scale=scale_factor)
     img = normalize(img)
 
-    left_square, right_square = split_img_into_squares(img)
+    # left_square, right_square = split_img_into_squares(img)
+    #
+    # left_square = hwc_to_chw(left_square)
+    # right_square = hwc_to_chw(right_square)
+    img = hwc_to_chw(img)
+    X = torch.from_numpy(img).unsqueeze(0)
 
-    left_square = hwc_to_chw(left_square)
-    right_square = hwc_to_chw(right_square)
-
-    X_left = torch.from_numpy(left_square).unsqueeze(0)
-    X_right = torch.from_numpy(right_square).unsqueeze(0)
+    # X_left = torch.from_numpy(left_square).unsqueeze(0)
+    # X_right = torch.from_numpy(right_square).unsqueeze(0)
     
     if use_gpu:
-        X_left = X_left.cuda()
-        X_right = X_right.cuda()
+        X = X.cuda()
+        # X_left = X_left.cuda()
+        # X_right = X_right.cuda()
 
     with torch.no_grad():
-        output_left = net(X_left)
-        output_right = net(X_right)
+        # output_left = net(X_left)
+        # output_right = net(X_right)
+        output = net(X)
 
-        left_probs = output_left.squeeze(0)
-        right_probs = output_right.squeeze(0)
+        # left_probs = output_left.squeeze(0)
+        # right_probs = output_right.squeeze(0)
+
+        probs = output.squeeze(0)
 
         tf = transforms.Compose(
             [
                 transforms.ToPILImage(),
-                transforms.Resize(img_height),
+                # transforms.Resize(img_height),
                 transforms.ToTensor()
             ]
         )
         
-        left_probs = tf(left_probs.cpu())
-        right_probs = tf(right_probs.cpu())
+        # left_probs = tf(left_probs.cpu())
+        # right_probs = tf(right_probs.cpu())
+        #
+        # left_mask_np = left_probs.squeeze().cpu().numpy()
+        # right_mask_np = right_probs.squeeze().cpu().numpy()
 
-        left_mask_np = left_probs.squeeze().cpu().numpy()
-        right_mask_np = right_probs.squeeze().cpu().numpy()
+        probs = tf(probs.cpu())
+        mask = probs.squeeze().cpu().numpy()
 
-    full_mask = merge_masks(left_mask_np, right_mask_np, img_width)
+    # full_mask = merge_masks(left_mask_np, right_mask_np, img_width)
 
     if use_dense_crf:
-        full_mask = dense_crf(np.array(full_img).astype(np.uint8), full_mask)
+        # full_mask = dense_crf(np.array(full_img).astype(np.uint8), full_mask)
+        mask = dense_crf(np.array(full_img).astype(np.uint8), mask)
 
-    return full_mask > out_threshold
+    return mask > out_threshold
 
 
 
