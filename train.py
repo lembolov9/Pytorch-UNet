@@ -7,31 +7,11 @@ import numpy as np
 import torch
 import torch.backends.cudnn as cudnn
 import torch.nn as nn
-from torch.nn import functional as F
 from torch import optim
 
 from eval import eval_net
 from unet import UNet
 from utils import get_ids, split_ids, split_train_val, get_imgs_and_masks, batch
-
-def bce_loss(true, logits, pos_weight=None):
-    """Computes the weighted binary cross-entropy loss.
-    Args:
-        true: a tensor of shape [B, 1, H, W].
-        logits: a tensor of shape [B, 1, H, W]. Corresponds to
-            the raw output or logits of the model.
-        pos_weight: a scalar representing the weight attributed
-            to the positive class. This is especially useful for
-            an imbalanced dataset.
-    Returns:
-        bce_loss: the weighted binary cross-entropy loss.
-    """
-    bce_loss = F.binary_cross_entropy_with_logits(
-        logits.float(),
-        true.float(),
-        pos_weight=pos_weight,
-    )
-    return bce_loss
 
 def train_net(net,
               epochs=5,
@@ -73,7 +53,7 @@ def train_net(net,
                           momentum=0.9,
                           weight_decay=weight_decay)
 
-    criterion = bce_loss
+    criterion = nn.BCELoss()
     t_time = time.time()
     for epoch in range(epochs):
         print('Starting epoch {}/{}.'.format(epoch + 1, epochs))
@@ -100,7 +80,7 @@ def train_net(net,
 
             true_masks_flat = true_masks.view(-1)
 
-            loss = criterion(masks_probs_flat, true_masks_flat)
+            loss = criterion(masks_probs_flat.float(), true_masks_flat.float())
             epoch_loss += loss.item()
 
             print('{0:.4f} --- loss: {1:.6f}'.format(i * batch_size / N_train, loss.item()))
