@@ -61,7 +61,7 @@ def train_net(net,
 
         # reset the generators
         train = get_imgs_and_masks(iddataset['train'], dir_img, dir_mask, img_scale)
-        val = get_imgs_and_masks(iddataset['val'], dir_img, dir_mask, img_scale)
+        val = get_imgs_and_masks(iddataset['val'], dir_img, dir_mask, img_scale, False)
         epoch_loss = 0
 
         for i, b in enumerate(batch(train, batch_size)):
