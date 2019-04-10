@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 from optparse import OptionParser
 import numpy as np
 
@@ -53,7 +54,7 @@ def train_net(net,
                           weight_decay=weight_decay)
 
     criterion = nn.BCELoss()
-
+    t_time = time.time()
     for epoch in range(epochs):
         print('Starting epoch {}/{}.'.format(epoch + 1, epochs))
         net.train()
@@ -88,7 +89,7 @@ def train_net(net,
             loss.backward()
             optimizer.step()
 
-        print('Epoch finished ! Loss: {}'.format(epoch_loss / i))
+        print('Epoch finished ! Loss: {} Time: {}'.format(epoch_loss / i, time.time()-t_time))
 
         if 1:
             val_dice = eval_net(net, val, gpu)
@@ -98,6 +99,7 @@ def train_net(net,
             torch.save(net.state_dict(),
                        dir_checkpoint + 'CP{}.pth'.format(epoch + 1))
             print('Checkpoint {} saved !'.format(epoch + 1))
+    print(f'All time: {time.time() - t_time}')
 
 
 
