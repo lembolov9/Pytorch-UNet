@@ -61,7 +61,7 @@ def train_net(net,
 
         # reset the generators
         train = get_imgs_and_masks(iddataset['train'], dir_img, dir_mask, img_scale)
-        val = get_imgs_and_masks(iddataset['val'], dir_img, dir_mask, img_scale, False)
+        val = get_imgs_and_masks(iddataset['val'], dir_img, dir_mask, img_scale)
         epoch_loss = 0
 
         for i, b in enumerate(batch(train, batch_size)):
@@ -89,7 +89,7 @@ def train_net(net,
             loss.backward()
             optimizer.step()
 
-        print('Epoch finished ! Loss: {} Time: {}'.format(epoch_loss / (i+1), time.time()-t_time))
+        print('Epoch finished ! Loss: {} Time: {}'.format(epoch_loss / (i+1)/, time.time()-t_time))
 
         if 1:
             val_dice = eval_net(net, val, gpu)
