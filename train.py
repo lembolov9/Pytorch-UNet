@@ -7,6 +7,7 @@ import numpy as np
 import torch
 import torch.backends.cudnn as cudnn
 import torch.nn as nn
+from torch.nn import functional as F
 from torch import optim
 
 from eval import eval_net
