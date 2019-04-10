@@ -89,7 +89,7 @@ def train_net(net,
             loss.backward()
             optimizer.step()
 
-        print('Epoch finished ! Loss: {} Time: {}'.format(epoch_loss / (i+1)/, time.time()-t_time))
+        print('Epoch finished ! Loss: {} Time: {}'.format(epoch_loss / (i+1), time.time()-t_time))
 
         if 1:
             val_dice = eval_net(net, val, gpu)
