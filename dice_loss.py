@@ -5,18 +5,13 @@ class DiceCoeff(Function):
     """Dice coeff for individual examples"""
 
     def forward(self, input, target):
+        self.save_for_backward(input, target)
+        eps = 0.000000001
+        self.inter = torch.dot(input.contiguous().view( -1), target.contiguous().view( -1))
+        self.union = torch.sum(input) + torch.sum(target) + eps
 
-        smooth = 1.
-
-        # have to use contiguous since they may from a torch.view op
-        iflat = input.contiguous().view(-1)
-        tflat = target.contiguous().view(-1)
-        intersection = (iflat * tflat).sum()
-
-        A_sum = torch.sum(tflat * iflat)
-        B_sum = torch.sum(tflat * tflat)
-
-        return 1 - ((2. * intersection + smooth) / (A_sum + B_sum + smooth))
+        t = (2 * self.inter.float() + eps) / self.union.float()
+        return t
 
     # This function has only a single output, so it gets only one gradient
     def backward(self, grad_output):
