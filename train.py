@@ -49,7 +49,7 @@ def train_net(net,
     optimizer = optim.SGD(net.parameters(),
                           lr=lr,
                           momentum=0.9,
-                          weight_decay=0.0005)
+                          weight_decay=0.005)
 
     criterion = nn.BCELoss()
 
