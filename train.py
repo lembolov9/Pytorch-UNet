@@ -76,9 +76,9 @@ def train_net(net,
                 true_masks = true_masks.cuda()
 
             masks_pred = net(imgs)
-            masks_probs_flat = masks_pred.view(-1)
+            masks_probs_flat = masks_pred.view(masks_pred.size(0),-1)
 
-            true_masks_flat = true_masks.view(-1)
+            true_masks_flat = true_masks.view(true_masks.size(0),-1)
 
             loss = criterion(masks_probs_flat, true_masks_flat)
             epoch_loss += loss.item()
